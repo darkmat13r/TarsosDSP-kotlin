@@ -15,9 +15,11 @@ import darkmat13r.tarsos.dsp.AudioProcessor
  * @author Damien Di Fede
  *
  */
-abstract class IIRFilter(val frequency: Float,
-                         val sample: Float,
-                         private val overlap: Int) :
+abstract class IIRFilter(
+    open val frequency: Float,
+    open val sampleRate: Float,
+    open val overlap: Int
+) :
     AudioProcessor {
 
     protected lateinit var aCoeff: FloatArray
@@ -56,7 +58,7 @@ abstract class IIRFilter(val frequency: Float,
 
 
     private fun process(offset: Int, audioFloatBuffer: FloatArray) {
-        for (i in offset until audioFloatBuffer.size){
+        for (i in offset until audioFloatBuffer.size) {
             //shift the in array
             input.copyInto(input, 1, 0, input.size - 1)
             input[0] = audioFloatBuffer[i]
@@ -64,19 +66,23 @@ abstract class IIRFilter(val frequency: Float,
             //calculate y based on a and b coefficients
             //and in and out.
             var y = 0f
-            for (j in aCoeff.indices){
+            for (j in aCoeff.indices) {
                 y += aCoeff[j] * input[j];
             }
-            for (j in bCoeff.indices){
+            for (j in bCoeff.indices) {
                 y += bCoeff[j] * prevOutput[j];
             }
 
             //shift the out array
-            prevOutput.copyInto(prevOutput, 1, 0 , prevOutput.size - 1)
+            prevOutput.copyInto(prevOutput, 1, 0, prevOutput.size - 1)
             prevOutput[0] = y
 
             audioFloatBuffer[i] = y
         }
+    }
+
+    override fun processingFinished() {
+        //DO NOTHING
     }
 
 }
