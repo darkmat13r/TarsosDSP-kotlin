@@ -156,6 +156,7 @@ class Yin(
             // (2.0f * s1 - s2 - s0) was incorrectly multiplied with -1
             betterTau = (tauEstimate + (s2 - s0) / (2 * (2 * s1 - s2 - s0))).toInt()
 
+
         }
         return betterTau
     }
