@@ -36,7 +36,7 @@ interface AudioInputStream {
      * @see .skip
      */
     @Throws(IOException::class)
-    fun read(b: ByteArray?, off: Int, len: Int): Int
+    fun read(b: ByteArray, off: Int, len: Int): Int
 
     /**
      * Closes this audio input stream and releases any system resources associated
@@ -50,7 +50,7 @@ interface AudioInputStream {
      *
      * @return The format of the underlying audio
      */
-    abstract var format: AudioFormat
+    var format: AudioFormat
 
-    abstract var frameLength: Long
+    var frameLength: Long
 }
