@@ -7,8 +7,8 @@ class Yin(
 ) : PitchDetector() {
 
     private val yinBuffer: FloatArray = FloatArray(bufferSize / 2)
-    private var probability = -1f
-    private var pitchInHertz = -1f
+    private var result = PitchResult.Pitch()
+
 
     companion object {
         private const val DEFAULT_THRESHOLD = 0.20f
@@ -18,7 +18,6 @@ class Yin(
 
     override fun detect(audioBuffer: FloatArray): PitchResult {
         var tauEstimate = 0
-        var pitchInHz = 0
 
         // Step 2
         difference(audioBuffer)
@@ -41,16 +40,12 @@ class Yin(
             // bestLocalEstimate()
 
             // conversion to Hz
-            pitchInHertz = audioSampleRate / betterTau
+            result.hz = audioSampleRate / betterTau
         } else {
-
-
             // no pitch found
-            pitchInHertz = -1f
+            result.hz = -1f
         }
-        return PitchResult.Pitch(
-            hz = pitchInHertz, probability = probability
-        )
+        return result
     }
 
     /**
@@ -102,7 +97,7 @@ class Yin(
                 //
                 // Since we want the periodicity and and not aperiodicity:
                 // periodicity = 1 - aperiodicity
-                probability = 1f - yinBuffer[tau]
+                result.probability = 1f - yinBuffer[tau]
                 break
             }
             tau++
@@ -112,7 +107,10 @@ class Yin(
         // if no pitch found, tau => -1
         if (tau == yinBuffer.size || yinBuffer[tau] >= threshold) {
             tau = -1
-            probability = 0f
+            result.probability = 0f
+            result.pitched = false
+        }else{
+            result.pitched = true
         }
         return tau
     }

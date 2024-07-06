@@ -46,16 +46,14 @@ class McLeodPitchMethod(
 
     }
 
+    private val result = PitchResult.Pitch()
+
     /**
      * Contains a normalized square difference function value for each delay
      * (tau).
      */
     private val nsdf = FloatArray(audioBufferSize)
 
-    /**
-     * The probability of the last detected pitch.
-     */
-    private var probability = 0f
 
     /**
      * The x and y coordinate of the top of the curve (nsdf).
@@ -105,7 +103,6 @@ class McLeodPitchMethod(
     }
 
     override fun detect(audioBuffer: FloatArray): PitchResult {
-        var pitch = 0f
 
         // 0. Clear previous results (Is this faster than initializing a list
         // again and again?)
@@ -138,7 +135,7 @@ class McLeodPitchMethod(
         }
 
         if (periodEstimates.isEmpty()) {
-            pitch = -1f
+            result.hz = -1f
         } else {
             // Use the overall maximum to calculate a cutoff.
             // The cutoff value is based on the highest value and a relative
@@ -157,17 +154,14 @@ class McLeodPitchMethod(
             val period = periodEstimates[periodIndex]
             val pitchEstimate = audioSampleRate / period
             if(pitchEstimate > LOWER_PITCH_CUTOFF){
-                pitch = pitchEstimate
+                result.hz = pitchEstimate
             }else{
-                pitch = -1f
+                result.hz = -1f
             }
         }
-        probability = highestAmplitude.toFloat()
+        result.probability = highestAmplitude.toFloat()
 
-        return PitchResult.Pitch(
-            hz = pitch,
-            probability = probability
-        )
+        return result
     }
 
     /**
