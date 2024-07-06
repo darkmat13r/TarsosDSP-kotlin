@@ -20,7 +20,7 @@ kotlin {
         summary = "Some description for the Shared Module"
         homepage = "Link to the Shared Module homepage"
         version = "1.0"
-        ios.deploymentTarget = "16.0"
+        ios.deploymentTarget = "11.0"
         framework {
             baseName = "shared"
             isStatic = true
@@ -34,6 +34,20 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+     
+        val iosX64Main by getting
+        val iosArm64Main by getting
+        val iosSimulatorArm64Main by getting
+        val iosMain by creating {
+            dependsOn(commonMain.get())
+            iosX64Main.dependsOn(this)
+            iosArm64Main.dependsOn(this)
+            iosSimulatorArm64Main.dependsOn(this)
+        }
+        val iosTest by creating {
+            dependsOn(commonTest.get())
+
         }
     }
 }

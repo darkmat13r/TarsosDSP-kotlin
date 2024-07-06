@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "TarsosDspKmm"
 include(":shared")
+include(":sample:composeApp")
