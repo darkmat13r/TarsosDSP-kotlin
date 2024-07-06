@@ -1,9 +1,7 @@
-package darkmat13r.tarsos.dsp
+package darkmat13r.tarsos.dsp.pitch
 
-import darkmat13r.tarsos.dsp.pitch.McLeodPitchMethod
-import darkmat13r.tarsos.dsp.pitch.PitchDetector
-import darkmat13r.tarsos.dsp.pitch.PitchResult
-import darkmat13r.tarsos.dsp.pitch.Yin
+import darkmat13r.tarsos.dsp.AudioEvent
+import darkmat13r.tarsos.dsp.AudioProcessor
 
 /**
  * Initialize a new pitch processor.
@@ -82,8 +80,8 @@ class PitchProcessor(
         fun handlePitch(pitch: PitchResult, timestamp: Float, progress: Float)
     }
 
-    override fun processFull(audioFloatBuffer: FloatArray, audioByteBuffer: ByteArray): Boolean {
-        processedSamples += audioByteBuffer.size
+    override fun process(audioEvent: AudioEvent): Boolean {
+        val audioFloatBuffer: FloatArray = audioEvent.floatBuffer
         val pitch = detector.detect(audioFloatBuffer)
         val timestamp = processedSamples / sampleRate
         val progress = processedSamples / totalLengthInSamples
@@ -91,13 +89,7 @@ class PitchProcessor(
         return true
     }
 
-    override fun processOverlapping(
-        audioFloatBuffer: FloatArray,
-        audioByteBuffer: ByteArray
-    ): Boolean {
-        processedSamples -= bufferOverlap
-        return processFull(audioFloatBuffer, audioByteBuffer)
-    }
+
 
     override fun processingFinished() {
         //DO NOTHING

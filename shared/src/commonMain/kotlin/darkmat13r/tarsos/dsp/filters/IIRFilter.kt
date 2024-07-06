@@ -1,5 +1,6 @@
 package darkmat13r.tarsos.dsp.filters
 
+import darkmat13r.tarsos.dsp.AudioEvent
 import darkmat13r.tarsos.dsp.AudioProcessor
 
 /**
@@ -43,22 +44,10 @@ abstract class IIRFilter(
 
     protected abstract fun calcCoeff()
 
-    override fun processFull(audioFloatBuffer: FloatArray, audioByteBuffer: ByteArray): Boolean {
-        process(0, audioFloatBuffer)
-        return true
-    }
 
-    override fun processOverlapping(
-        audioFloatBuffer: FloatArray,
-        audioByteBuffer: ByteArray
-    ): Boolean {
-        process(overlap, audioFloatBuffer)
-        return true
-    }
-
-
-    private fun process(offset: Int, audioFloatBuffer: FloatArray) {
-        for (i in offset until audioFloatBuffer.size) {
+    override fun process(audioEvent: AudioEvent): Boolean {
+        val audioFloatBuffer = audioEvent.floatBuffer
+        for (i in audioEvent.overlap until audioFloatBuffer.size) {
             //shift the in array
             input.copyInto(input, 1, 0, input.size - 1)
             input[0] = audioFloatBuffer[i]
@@ -79,6 +68,7 @@ abstract class IIRFilter(
 
             audioFloatBuffer[i] = y
         }
+        return true
     }
 
     override fun processingFinished() {

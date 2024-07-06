@@ -32,6 +32,7 @@ kotlin {
             //put your multiplatform dependencies here
             implementation(libs.ktor.client.core)
             implementation(libs.buffer)
+            implementation(libs.kermit) //Add latest version
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

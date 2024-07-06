@@ -52,10 +52,10 @@ abstract class AudioFloatConverter() {
 
     object Factory {
 
-        fun create(format: AudioFormat): AudioFloatConverter? {
+        fun create(format: AudioFormat): AudioFloatConverter {
             var conv: AudioFloatConverter? = null
-            if (format.frameSize == 0) return null
-            if (format.frameSize != ((format.sampleSizeInBits + 7) / 8) * format.channels) return null
+            if (format.frameSize == 0) throw IllegalStateException("Frame Size is required")
+            if (format.frameSize != ((format.sampleSizeInBits + 7) / 8) * format.channels) throw IllegalStateException("Invalid frame size")
 
             if (format.encoding == AudioFormat.Encoding.PCM_SIGNED) {
                 conv = if (format.isBigEndian) {
@@ -110,7 +110,7 @@ abstract class AudioFloatConverter() {
             }
 
             conv?.format = format
-            return conv
+            return conv ?: throw  IllegalStateException("Unable to create proper converter")
         }
     }
 
