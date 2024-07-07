@@ -60,20 +60,13 @@ class SilenceDetector(val threshold: Double = DEFAULT_SILENCE_THRESHOLD) : Audio
      * @return True if the audio information in buffer corresponds with silence,
      *         false otherwise.
      */
-    fun isSilence(buffer: FloatArray, silenceThreshold: Double = threshold): Boolean =
+    private fun isSilence(buffer: FloatArray, silenceThreshold: Double = threshold): Boolean =
         soundPressureLeve(buffer) < silenceThreshold
 
-
-    override fun processFull(audioFloatBuffer: FloatArray, audioByteBuffer: ByteArray): Boolean {
-        return !isSilence(audioFloatBuffer)
+    override fun process(audioEvent: AudioEvent): Boolean {
+        return isSilence(audioEvent.floatBuffer)
     }
 
-    override fun processOverlapping(
-        audioFloatBuffer: FloatArray,
-        audioByteBuffer: ByteArray
-    ): Boolean {
-        return processFull(audioFloatBuffer, audioByteBuffer)
-    }
 
     override fun processingFinished() {
         //DO NOTHING

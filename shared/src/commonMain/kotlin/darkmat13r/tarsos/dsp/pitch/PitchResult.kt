@@ -9,4 +9,5 @@ sealed interface PitchResult{
          var probability : Float = -1f
          var pitched : Boolean = false
      }
+    data object None : PitchResult
 }

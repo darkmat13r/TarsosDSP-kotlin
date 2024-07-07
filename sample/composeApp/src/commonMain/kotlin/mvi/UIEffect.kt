@@ -1,0 +1,3 @@
+package mvi
+
+interface UIEffect

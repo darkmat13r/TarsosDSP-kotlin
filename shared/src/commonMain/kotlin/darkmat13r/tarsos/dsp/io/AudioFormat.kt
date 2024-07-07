@@ -314,21 +314,6 @@ class AudioFormat
         bigEndian
     )
 
-    /**
-     * Obtains the type of encoding for sounds in this format.
-     *
-     * @return the encoding type
-     * @see Encoding.PCM_SIGNED
-     *
-     * @see Encoding.PCM_UNSIGNED
-     *
-     * @see Encoding.ULAW
-     *
-     * @see Encoding.ALAW
-     */
-    fun getEncoding(): Encoding? {
-        return encoding
-    }
 
 
     /**
@@ -393,7 +378,7 @@ class AudioFormat
      * $$kk: 04.20.99: i changed the semantics of this.
      */
     fun matches(format: AudioFormat): Boolean {
-        if (format.getEncoding() == getEncoding() &&
+        if (format.encoding == encoding &&
             ((format.sampleRate == NOT_SPECIFIED.toFloat()) || (format.sampleRate == sampleRate)) &&
             (format.sampleSizeInBits == sampleSizeInBits) &&
             (format.channels == channels &&
@@ -415,13 +400,11 @@ class AudioFormat
      */
     override fun toString(): String {
         var sEncoding = ""
-        if (getEncoding() != null) {
-            sEncoding = getEncoding().toString() + " "
-        }
+        sEncoding = "$encoding "
         val sSampleRate = if (sampleRate == NOT_SPECIFIED.toFloat()) {
             "unknown sample rate, "
         } else {
-            "" + sampleRate + " Hz, "
+            "$sampleRate Hz, "
         }
         val sSampleSizeInBits = if (sampleSizeInBits.toFloat() == NOT_SPECIFIED.toFloat()) {
             "unknown bits per sample, "
@@ -456,7 +439,7 @@ class AudioFormat
         }
 
         var sEndian = ""
-        if ((getEncoding() == Encoding.PCM_SIGNED || getEncoding() == Encoding.PCM_UNSIGNED)
+        if ((encoding == Encoding.PCM_SIGNED || encoding == Encoding.PCM_UNSIGNED)
             && ((sampleSizeInBits > 8)
                     || (sampleSizeInBits == NOT_SPECIFIED))
         ) {

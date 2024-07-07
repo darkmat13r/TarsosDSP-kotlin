@@ -202,15 +202,22 @@ class AudioDispatcher(
             throw Error(message)
         }
 
+        Logger.i("bytesToRead ${bytesToRead}")
+
         // As long as the stream has not ended
         while (bytesToRead != 0 && !stopped) {
 
+            Logger.i("bytesToRead iteration ${bytesToRead}")
             //Makes sure the right buffers are processed, they can be changed by audio processors.
-            for (processor in audioProcessors) {
-                if (!processor.process(audioEvent)) {
-                    //skip to the next audio processors if false is returned.
-                    break
+            try{
+                for (processor in audioProcessors) {
+                    if (!processor.process(audioEvent)) {
+                        //skip to the next audio processors if false is returned.
+                        break
+                    }
                 }
+            }catch (e: Exception){
+                e.printStackTrace()
             }
 
             if (!stopped) {
@@ -222,6 +229,7 @@ class AudioDispatcher(
                 // Slide the buffer.
                 try {
                     bytesToRead = readNextAudioBlock()
+                    Logger.i("bytesToRead  readNextAudioBlock ${bytesToRead}")
                     audioEvent.overlap = floatOverlap
                 } catch (e: IOException) {
                     val message = "Error while reading audio input stream: " + e.message
@@ -230,7 +238,7 @@ class AudioDispatcher(
                 }
             }
         }
-
+        Logger.i("stopped ${stopped}")
 
         // Notify all processors that no more data is available.
         // when stop() is called processingFinished is called explicitly, no need to do this again.
@@ -256,6 +264,7 @@ class AudioDispatcher(
      *             been closed.
      */
     private fun readNextAudioBlock(): Int {
+        Logger.i("readNextAudioBlock ${floatOverlap} < ${audioFloatBuffer.size}")
         check(floatOverlap < audioFloatBuffer.size)
 
         // Is this the first buffer?
@@ -300,11 +309,13 @@ class AudioDispatcher(
         // Is the end of the stream reached?
         var endOfStream = false
 
+        Logger.i("Always try to read the `bytesToRead` amount of bytes")
         // Always try to read the `bytesToRead` amount of bytes
         // Unless the stream is closed (stopped is true) or no bytes could be read during
         //on iteration
+        Logger.i("stopped ${stopped},endOfStream ${endOfStream} , totalBytesRead ${totalBytesRead}bytesToRead ${bytesToRead}")
         while (!stopped && !endOfStream && totalBytesRead < bytesToRead) {
-            try {
+            /*try {
                 bytesRead = audioInputStream.read(
                     audioByteBuffer,
                     offsetInBytes + totalBytesRead,
@@ -314,7 +325,13 @@ class AudioDispatcher(
                 // The pipe decoder generates an out of bounds if end
                 // of stream is reached. Ugly hack...
                 bytesRead = -1
-            }
+                ex.printStackTrace()
+            }*/
+            bytesRead = audioInputStream.read(
+                audioByteBuffer,
+                offsetInBytes + totalBytesRead,
+                bytesToRead - totalBytesRead
+            )
 
             if (bytesRead == -1) {
                 // The end of the stream is reached if the number of bytes read
@@ -326,6 +343,7 @@ class AudioDispatcher(
             }
         }
 
+        Logger.i("endOfStream ${endOfStream}")
         if (endOfStream) {
             // Could not read a full buffer from the stream , there are two options:
             if (zeroPadLastBuffer) {
@@ -385,7 +403,7 @@ class AudioDispatcher(
         //Makes sure AudioEvent contains correct info.
         audioEvent.setAudioBuffer(audioFloatBuffer)
         audioEvent.overlap = offsetInSamples
-
+        Logger.i("totalBytesRead ${totalBytesRead}")
         return totalBytesRead
     }
 

@@ -1,5 +1,5 @@
 [versions]
-agp = "8.5.0"
+agp = "8.2.0"
 buffer = "1.4.1"
 kermit = "2.0.4"
 kotlin = "2.0.0"
@@ -7,10 +7,14 @@ compose = "1.6.8"
 compose-material3 = "1.2.1"
 androidx-activityCompose = "1.9.0"
 ktorClientCore = "3.0.0-beta-1"
-compose-plugin = "1.6.11"
+compose-plugin = "1.7.0-alpha01"
 android-compileSdk = "34"
 android-minSdk = "24"
 android-targetSdk = "34"
+navigationComposeVersion = "2.8.0-alpha02"
+permissionsCompose = "0.18.0"
+lifecycleViewModel = "2.8.3"
+koinBom = "3.6.0-wasm-alpha2"
 
 [libraries]
 buffer = { module = "com.ditchoom:buffer", version.ref = "buffer" }
@@ -23,6 +27,14 @@ compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview"
 compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
 compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "compose-material3" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorClientCore" }
+navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationComposeVersion" }
+lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "lifecycleViewModel"}
+permissions-compose = { module = "dev.icerock.moko:permissions-compose", version.ref = "permissionsCompose" }
+koin-android = { module = "io.insert-koin:koin-android" }
+koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koinBom" }
+koin-compose = { module = "io.insert-koin:koin-compose" }
+koin-core = { module = "io.insert-koin:koin-core" }
+koin-core-coroutines = { module = "io.insert-koin:koin-core-coroutines" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

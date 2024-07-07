@@ -24,8 +24,6 @@ class PitchProcessor(
     private val algorithm: PitchEstimationAlgorithm,
     private val sampleRate: Float,
     private val bufferSize: Int,
-    private val bufferOverlap: Int,
-    private val totalLengthInSamples: Long,
     private val handler: DetectedPitchHandler
 ) : AudioProcessor {
 
@@ -35,8 +33,8 @@ class PitchProcessor(
 
     init {
        detector = when(algorithm){
-            PitchEstimationAlgorithm.YIN -> McLeodPitchMethod(sampleRate, bufferSize)
-            PitchEstimationAlgorithm.MPM -> Yin(sampleRate, bufferSize)
+            PitchEstimationAlgorithm.YIN -> Yin(sampleRate, bufferSize)
+            PitchEstimationAlgorithm.MPM -> McLeodPitchMethod(sampleRate, bufferSize)
         }
     }
 
@@ -77,15 +75,13 @@ class PitchProcessor(
          *            progress indication is possible. It is a percentage. If a
          *            stream is analyzed a negative value is returned.
          */
-        fun handlePitch(pitch: PitchResult, timestamp: Float, progress: Float)
+        fun handlePitch(pitch: PitchResult, audioEvent: AudioEvent)
     }
 
     override fun process(audioEvent: AudioEvent): Boolean {
         val audioFloatBuffer: FloatArray = audioEvent.floatBuffer
         val pitch = detector.detect(audioFloatBuffer)
-        val timestamp = processedSamples / sampleRate
-        val progress = processedSamples / totalLengthInSamples
-        handler.handlePitch(pitch, timestamp, progress.toFloat())
+        handler.handlePitch(pitch, audioEvent)
         return true
     }
 
