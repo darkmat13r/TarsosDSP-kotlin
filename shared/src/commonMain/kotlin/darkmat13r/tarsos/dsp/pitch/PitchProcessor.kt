@@ -1,9 +1,7 @@
-package darkmat13r.tarsos.dsp
+package darkmat13r.tarsos.dsp.pitch
 
-import darkmat13r.tarsos.dsp.pitch.McLeodPitchMethod
-import darkmat13r.tarsos.dsp.pitch.PitchDetector
-import darkmat13r.tarsos.dsp.pitch.PitchResult
-import darkmat13r.tarsos.dsp.pitch.Yin
+import darkmat13r.tarsos.dsp.AudioEvent
+import darkmat13r.tarsos.dsp.AudioProcessor
 
 /**
  * Initialize a new pitch processor.
@@ -26,8 +24,6 @@ class PitchProcessor(
     private val algorithm: PitchEstimationAlgorithm,
     private val sampleRate: Float,
     private val bufferSize: Int,
-    private val bufferOverlap: Int,
-    private val totalLengthInSamples: Long,
     private val handler: DetectedPitchHandler
 ) : AudioProcessor {
 
@@ -37,8 +33,8 @@ class PitchProcessor(
 
     init {
        detector = when(algorithm){
-            PitchEstimationAlgorithm.YIN -> McLeodPitchMethod(sampleRate, bufferSize)
-            PitchEstimationAlgorithm.MPM -> Yin(sampleRate, bufferSize)
+            PitchEstimationAlgorithm.YIN -> Yin(sampleRate, bufferSize)
+            PitchEstimationAlgorithm.MPM -> McLeodPitchMethod(sampleRate, bufferSize)
         }
     }
 
@@ -79,25 +75,17 @@ class PitchProcessor(
          *            progress indication is possible. It is a percentage. If a
          *            stream is analyzed a negative value is returned.
          */
-        fun handlePitch(pitch: PitchResult, timestamp: Float, progress: Float)
+        fun handlePitch(pitch: PitchResult, audioEvent: AudioEvent)
     }
 
-    override fun processFull(audioFloatBuffer: FloatArray, audioByteBuffer: ByteArray): Boolean {
-        processedSamples += audioByteBuffer.size
+    override fun process(audioEvent: AudioEvent): Boolean {
+        val audioFloatBuffer: FloatArray = audioEvent.floatBuffer
         val pitch = detector.detect(audioFloatBuffer)
-        val timestamp = processedSamples / sampleRate
-        val progress = processedSamples / totalLengthInSamples
-        handler.handlePitch(pitch, timestamp, progress.toFloat())
+        handler.handlePitch(pitch, audioEvent)
         return true
     }
 
-    override fun processOverlapping(
-        audioFloatBuffer: FloatArray,
-        audioByteBuffer: ByteArray
-    ): Boolean {
-        processedSamples -= bufferOverlap
-        return processFull(audioFloatBuffer, audioByteBuffer)
-    }
+
 
     override fun processingFinished() {
         //DO NOTHING

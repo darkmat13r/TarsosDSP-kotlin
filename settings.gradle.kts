@@ -11,8 +11,11 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { setUrl("https://jitpack.io") }
     }
 }
+
+
 
 rootProject.name = "TarsosDspKmm"
 include(":shared")
