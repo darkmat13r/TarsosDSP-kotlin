@@ -60,6 +60,7 @@ kotlin {
 
         commonMain.dependencies {
             implementation(compose.runtime)
+            implementation(compose.foundation)
             //put your multiplatform dependencies here
             implementation(libs.ktor.client.core)
             implementation(libs.buffer)

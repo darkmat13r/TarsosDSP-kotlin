@@ -1,5 +1,7 @@
 package darkmat13r.tarsos.dsp.pitch
 
+import co.touchlab.kermit.Logger
+
 class Yin(
     private val audioSampleRate: Float,
     private val bufferSize: Int,
@@ -73,6 +75,7 @@ class Yin(
      * </code>
      */
     private fun cumulativeMeanNormalizedDifference() {
+        Logger.i("yinBuffer size ${yinBuffer.size}" )
         yinBuffer[0] = 1f
         var runningSum = 0f
         for (tau in 1 until yinBuffer.size) {
