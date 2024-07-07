@@ -88,6 +88,7 @@ kotlin {
             implementation(libs.navigation.compose)
 
             implementation(libs.lifecycle.viewmodel)
+            implementation(libs.kermit)
 
             implementation(project(":shared"))
         }

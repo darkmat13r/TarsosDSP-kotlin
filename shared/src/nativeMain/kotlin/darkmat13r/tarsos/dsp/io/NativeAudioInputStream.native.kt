@@ -36,14 +36,10 @@ actual class NativeAudioInputStream(
 
     @OptIn(ExperimentalForeignApi::class)
     private fun setup(){
-
         val bufferSize = getBufferSize()
         val session = AVAudioSession.sharedInstance()
         session.setCategory(AVAudioSessionCategoryPlayAndRecord, error = null)
         session.setActive(true, error = null)
-        Logger.i("session.hwSampleRate ${session.sampleRate}")
-        Logger.i("audioFormat ${audioFormat.sampleRate}")
-        Logger.i("format ${format.sampleRate}")
         inputNode.installTapOnBus(0u, bufferSize.convert(), audioFormat) { buffer, time ->
             if (!isRunning) return@installTapOnBus
             if (buffer == null) return@installTapOnBus

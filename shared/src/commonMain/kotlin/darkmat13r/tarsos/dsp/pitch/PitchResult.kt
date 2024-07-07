@@ -8,6 +8,10 @@ sealed interface PitchResult{
          var hz : Float = 0f
          var probability : Float = -1f
          var pitched : Boolean = false
+
+         override fun toString(): String {
+             return "Hz : $hz, Probability $probability,  Pitched $pitched"
+         }
      }
     data object None : PitchResult
 }

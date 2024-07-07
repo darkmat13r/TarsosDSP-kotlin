@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
+import org.koin.core.logger.Logger
 import utils.logError
 import kotlin.math.absoluteValue
 import kotlin.math.log2
@@ -42,7 +43,7 @@ class Tuner(private val audioManager: AudioManager) :
         withContext(IODispatcher) {
             runCatching {
                 val bufferSize = audioManager.getBufferSize()
-
+                co.touchlab.kermit.Logger.i("Start Recording ${bufferSize}")
                 pitchProcessor = PitchProcessor(
                     PitchProcessor.PitchEstimationAlgorithm.YIN,
                     AudioConfig.SAMPLE_RATE.toFloat(),
