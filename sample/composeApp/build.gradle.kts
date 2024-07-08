@@ -89,6 +89,7 @@ kotlin {
 
             implementation(libs.lifecycle.viewmodel)
             implementation(libs.kermit)
+            implementation(libs.kotlinx.datetime)
 
             implementation(project(":shared"))
         }

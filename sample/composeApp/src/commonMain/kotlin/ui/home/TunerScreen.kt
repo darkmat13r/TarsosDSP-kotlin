@@ -2,6 +2,7 @@ package ui.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -54,12 +55,16 @@ fun HomeScreen(
 
     Scaffold {
         Column(
-            modifier = Modifier.padding(it).fillMaxWidth().padding(MaterialTheme.spacing.medium),
+            modifier = Modifier.padding(it).fillMaxSize().padding(MaterialTheme.spacing.medium),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             Text("Pitch Detected", style = MaterialTheme.typography.labelSmall)
-            Text("${state.tuning.note}", style = MaterialTheme.typography.headlineMedium)
+            Text("${state.tuning.note?.tone}" +
+                    " ${state.tuning.note?.octave} ",
+                style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(top = MaterialTheme.spacing.medium))
+            Text("${state.tuning.note?.formattedFrequency}" ,
+                style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.outline)
         }
     }
 }

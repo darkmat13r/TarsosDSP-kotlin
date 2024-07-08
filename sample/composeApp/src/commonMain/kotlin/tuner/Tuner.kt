@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
+import kotlinx.datetime.Clock
 import org.koin.core.logger.Logger
 import utils.logError
 import kotlin.math.absoluteValue
@@ -74,8 +75,11 @@ class Tuner(private val audioManager: AudioManager) :
     }
 
     override fun handlePitch(pitch: PitchResult, audioEvent: AudioEvent) {
-        if (pitch is PitchResult.Pitch)
+        if (pitch is PitchResult.Pitch) {
+            if (pitch.pitched)
+                co.touchlab.kermit.Logger.i("pitch ${pitch} ${Clock.System.now()}")
             _state.value = getTuning(pitch.hz)
+        }
     }
 
     private fun getTuning(detectedFrequency: Float): Tuning {

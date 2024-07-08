@@ -54,7 +54,7 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     sourceSets {
         val desktopMain by getting
 
@@ -65,6 +65,9 @@ kotlin {
             implementation(libs.ktor.client.core)
             implementation(libs.buffer)
             implementation(libs.kermit) //Add latest version
+
+            implementation(libs.kotlinx.datetime)
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

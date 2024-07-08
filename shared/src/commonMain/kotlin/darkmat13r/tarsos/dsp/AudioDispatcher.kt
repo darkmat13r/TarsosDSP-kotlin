@@ -305,7 +305,7 @@ class AudioDispatcher(
         // Unless the stream is closed (stopped is true) or no bytes could be read during
         //on iteration
         while (!stopped && !endOfStream && totalBytesRead < bytesToRead) {
-            /*try {
+            try {
                 bytesRead = audioInputStream.read(
                     audioByteBuffer,
                     offsetInBytes + totalBytesRead,
@@ -316,12 +316,7 @@ class AudioDispatcher(
                 // of stream is reached. Ugly hack...
                 bytesRead = -1
                 ex.printStackTrace()
-            }*/
-            bytesRead = audioInputStream.read(
-                audioByteBuffer,
-                offsetInBytes + totalBytesRead,
-                bytesToRead - totalBytesRead
-            )
+            }
 
             if (bytesRead == -1) {
                 // The end of the stream is reached if the number of bytes read
