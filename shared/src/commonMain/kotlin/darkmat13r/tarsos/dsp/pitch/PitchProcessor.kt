@@ -36,6 +36,7 @@ class PitchProcessor(
         detector = when (algorithm) {
             PitchEstimationAlgorithm.YIN -> Yin(sampleRate, bufferSize)
             PitchEstimationAlgorithm.MPM -> McLeodPitchMethod(sampleRate, bufferSize)
+            PitchEstimationAlgorithm.FFT_YIN -> FastYin(sampleRate, bufferSize)
             else -> pitchDetector ?: throw Exception("Either set algorithm or set pitch detector")
         }
     }
@@ -57,7 +58,14 @@ class PitchProcessor(
          * "http://miracle.otago.ac.nz/postgrads/tartini/papers/A_Smarter_Way_to_Find_Pitch.pdf"
          * >A Smarter Way to Find Pitch</a>".
          */
-        MPM
+        MPM,
+
+        /**
+         * A YIN implementation with a faster  {@link FastYin} for the implementation. Or see <a href=
+         * "http://recherche.ircam.fr/equipes/pcm/cheveign/ps/2002_JASA_YIN_proof.pdf"
+         * >the YIN article</a>.
+         */
+        FFT_YIN,
     }
 
     /**
