@@ -9,7 +9,7 @@ interface AudioProcessor {
      *            The audio event that contains audio data.
      * @return False if the chain needs to stop here, true otherwise. This can be used to implement e.g. a silence detector.
      */
-    fun process(audioEvent: AudioEvent) : Boolean
+    suspend fun process(audioEvent: AudioEvent) : Boolean
 
 
     /**

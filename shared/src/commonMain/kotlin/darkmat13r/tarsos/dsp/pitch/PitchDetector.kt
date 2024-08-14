@@ -43,5 +43,5 @@ abstract class PitchDetector {
      *     }
      * }
      */
-    abstract fun detect(audioBuffer: FloatArray) : PitchResult
+    abstract suspend fun detect(audioBuffer: FloatArray) : PitchResult
 }

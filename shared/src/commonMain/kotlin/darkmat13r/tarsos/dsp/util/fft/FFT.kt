@@ -35,7 +35,7 @@ import kotlin.math.sqrt
  *
  * @author Joren Six
  */
-class FFT @JvmOverloads constructor(size: Int, private val windowFunction: WindowFunction? = null) {
+class FFT constructor(size: Int, private val windowFunction: WindowFunction? = null) {
     /**
      * Forward FFT.
      */

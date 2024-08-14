@@ -45,7 +45,7 @@ abstract class IIRFilter(
     protected abstract fun calcCoeff()
 
 
-    override fun process(audioEvent: AudioEvent): Boolean {
+    override suspend fun process(audioEvent: AudioEvent): Boolean {
         val audioFloatBuffer = audioEvent.floatBuffer
         for (i in audioEvent.overlap until audioFloatBuffer.size) {
             //shift the in array

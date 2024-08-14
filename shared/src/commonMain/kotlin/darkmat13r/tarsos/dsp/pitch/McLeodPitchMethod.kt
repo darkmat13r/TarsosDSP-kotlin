@@ -102,7 +102,7 @@ class McLeodPitchMethod(
         }
     }
 
-    override fun detect(audioBuffer: FloatArray): PitchResult {
+    override suspend fun detect(audioBuffer: FloatArray): PitchResult {
 
         // 0. Clear previous results (Is this faster than initializing a list
         // again and again?)

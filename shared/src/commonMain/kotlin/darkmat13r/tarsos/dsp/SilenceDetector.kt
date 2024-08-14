@@ -63,7 +63,7 @@ class SilenceDetector(val threshold: Double = DEFAULT_SILENCE_THRESHOLD) : Audio
     private fun isSilence(buffer: FloatArray, silenceThreshold: Double = threshold): Boolean =
         soundPressureLeve(buffer) < silenceThreshold
 
-    override fun process(audioEvent: AudioEvent): Boolean {
+    override suspend fun process(audioEvent: AudioEvent): Boolean {
         return isSilence(audioEvent.floatBuffer)
     }
 

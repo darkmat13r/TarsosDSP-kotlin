@@ -80,7 +80,7 @@ class PitchProcessor(
         fun handlePitch(pitch: PitchResult, audioEvent: AudioEvent)
     }
 
-    override fun process(audioEvent: AudioEvent): Boolean {
+    override suspend fun process(audioEvent: AudioEvent): Boolean {
         val audioFloatBuffer: FloatArray = audioEvent.floatBuffer
         val pitch = detector.detect(audioFloatBuffer)
         handler.handlePitch(pitch, audioEvent)

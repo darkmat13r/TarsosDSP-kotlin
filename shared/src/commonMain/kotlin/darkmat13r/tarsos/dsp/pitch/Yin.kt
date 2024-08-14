@@ -19,7 +19,7 @@ class Yin(
         private const val DEFAULT_BUFFER_SIZE = 1024
     }
 
-    override fun detect(audioBuffer: FloatArray): PitchResult {
+    override suspend fun detect(audioBuffer: FloatArray): PitchResult {
         var tauEstimate = 0
 
         // Step 2

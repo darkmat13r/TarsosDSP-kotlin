@@ -182,7 +182,7 @@ class AudioDispatcher(
         audioProcessor.processingFinished()
     }
 
-    fun run() {
+    suspend fun run() {
         var bytesToRead = 0
 
         if (bytesToSkip != 0L) {

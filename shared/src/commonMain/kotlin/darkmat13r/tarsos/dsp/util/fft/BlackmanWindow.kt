@@ -53,7 +53,7 @@ import kotlin.math.cos
  * @see [The Blackman Window](http://en.wikipedia.org/wiki/Window_function.Blackman_windows)
  */
 class BlackmanWindow
-/** Constructs a Blackman window with a default alpha value of 0.16  */ @JvmOverloads constructor(
+/** Constructs a Blackman window with a default alpha value of 0.16  */ constructor(
     private val alpha: Float = 0.16f
 ) : WindowFunction() {
     /**
