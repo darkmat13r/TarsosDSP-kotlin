@@ -21,20 +21,22 @@ import darkmat13r.tarsos.dsp.AudioProcessor
  *            The handler handles detected pitch.
  */
 class PitchProcessor(
-    private val algorithm: PitchEstimationAlgorithm,
     private val sampleRate: Float,
     private val bufferSize: Int,
-    private val handler: DetectedPitchHandler
+    private val handler: DetectedPitchHandler,
+    private val algorithm: PitchEstimationAlgorithm? = null,
+    pitchDetector: PitchDetector? = null,
 ) : AudioProcessor {
 
-    private val detector : PitchDetector
+    private val detector: PitchDetector
 
     private var processedSamples: Int = 0
 
     init {
-       detector = when(algorithm){
+        detector = when (algorithm) {
             PitchEstimationAlgorithm.YIN -> Yin(sampleRate, bufferSize)
             PitchEstimationAlgorithm.MPM -> McLeodPitchMethod(sampleRate, bufferSize)
+            else -> pitchDetector ?: throw Exception("Either set algorithm or set pitch detector")
         }
     }
 
@@ -84,7 +86,6 @@ class PitchProcessor(
         handler.handlePitch(pitch, audioEvent)
         return true
     }
-
 
 
     override fun processingFinished() {
